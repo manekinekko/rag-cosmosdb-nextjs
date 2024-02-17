@@ -1,9 +1,9 @@
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
-    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
-    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -95,6 +95,14 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+header {
+  background: #171717;
+  height: 114px;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -104,4 +112,29 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+chat-component {
+  --text-color: #15192c;
+  --c-primary: #15192c;
+  --c-secondary: #f4f5f9;
+  --c-text: var(--c-primary);
+  --c-white: #fff;
+  --c-black: #111111;
+  --c-red: #ff0000;
+  --c-light-gray: transparent;
+  --c-base-gray: var(--c-secondary);
+  --c-dark-gray: #4e5288;
+  --c-accent-high: transparent;
+  --c-accent-dark: #5e3c7d;
+  --c-accent-light: transparent;
+  width: 100vw;
+  display: block;
+  padding: var(--d-base);
+  color: var(--c-text);
+  margin: 0 auto;
+  width: 60vw;
+  max-width: 1400px;
+  background: white;
+  border-radius: 8px;
 }

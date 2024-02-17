@@ -2,16 +2,17 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, rename `.env.local.example` to `.env.local` and provide the `AZURE_COSMOS_DB_ENDPOINT` and `AZURE_COSMOS_DB_KEY` values:
+
+```bash
+AZURE_COSMOS_DB_ENDPOINT=""
+AZURE_COSMOS_DB_KEY=""
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

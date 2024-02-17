@@ -1,0 +1,17 @@
+.main {
+    display: flex;
+    min-height: 100vh;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    background: #171717;
+    color: white;
+    padding: 1rem;
+    border: 0 none;
+    border-radius: 10px;
+    cursor: pointer;
+}
