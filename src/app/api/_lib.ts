@@ -4,8 +4,6 @@ import {
   CosmosDbDiagnosticLevel,
   OperationInput,
 } from "@azure/cosmos";
-import { createHash } from "crypto";
-import { hash } from "../_utils";
 
 const DB_ID = "ChatHistory";
 const CONTAINER_ID = "Session";

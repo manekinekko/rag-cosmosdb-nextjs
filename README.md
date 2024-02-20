@@ -1,18 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a Next.js project that uses Azure Cosmos DB to create a simple web experience that allows users to store their OpenAI ChatGPT sessions in a Cosmos DB instance.
+
+The application uses data that was trained on the Contoso Real Estate dataset, which is available in the [here](https://github.com/Azure-Samples/contoso-real-estate).
 
 ## Getting Started
 
-First, rename `.env.local.example` to `.env.local` and provide the following values:
+### Cosmos DB
+
+Before using this project, you need to create a Cosmos DB instance and a database with a collection. You can follow the [official documentation](https://learn.microsoft.com/azure/cosmos-db/nosql/quickstart-portal) to create a Cosmos DB instance.
+
+When creating the Cosmos DB instance, choose the NOSQL API and the location that best suits your needs. Then, create a database and provide a [hierarchical Partition Key](https://learn.microsoft.com/azure/cosmos-db/hierarchical-partition-keys) of:
+
+```bash
+/UserId
+    /SessionId
+```
+
+### GitHub OAuth
+
+You also need to create a GitHub OAuth application. You can follow the [official documentation](https://docs.github.com/en/developers/apps/building-oauth-apps/creating-an-oauth-app) to create a GitHub OAuth application.
+
+### Environment Variables
+
+Once you have created the Cosmos DB instance and the GitHub OAuth application, you need to create a `.env.local` file in the root of the project with the following environment variables:
 
 ```bash
 AZURE_COSMOS_DB_ENDPOINT=""
 AZURE_COSMOS_DB_KEY=""
-NEXTAUTH_SECRET=""
-NEXTAUTH_URL=""
-GITHUB_ID=""
-GITHUB_SECRET=""
-RAG_API_URL=""
+
+NEXTAUTH_SECRET="" # Provide a random string, this can be generated with `openssl rand -hex 32`
+NEXTAUTH_URL="http://localhost:3000" # The URL of your Next.js app (by default, http://localhost:3000)
+
+GITHUB_ID="" # The Client ID of your GitHub OAuth application
+GITHUB_SECRET="" # The Client Secret of your GitHub OAuth application
+
+NEXT_PUBLIC_RAG_API_URL="" # The URL of the RAG API (see https://github.com/Azure-Samples/azure-search-openai-javascript)
 ```
+
+### Running the Project
 
 Then, run the development server:
 
@@ -21,19 +45,6 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
 ## Deploy on Vercel
 
