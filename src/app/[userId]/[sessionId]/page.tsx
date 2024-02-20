@@ -210,7 +210,7 @@ export default function Chat({
                 className={styles.chatComponent}
                 title="Chat with our support Agent"
                 data-interaction-model="chat"
-                data-api-url="https://search.delightfulglacier-c212a9dc.eastus2.azurecontainerapps.io/"
+                data-api-url={process.env.RAG_API_URL}
                 data-use-stream="true"
                 data-custom-styles={JSON.stringify(chatComponentCustomStyles)}
                 data-custom-branding="false"

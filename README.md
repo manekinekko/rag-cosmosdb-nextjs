@@ -2,11 +2,16 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, rename `.env.local.example` to `.env.local` and provide the `AZURE_COSMOS_DB_ENDPOINT` and `AZURE_COSMOS_DB_KEY` values:
+First, rename `.env.local.example` to `.env.local` and provide the following values:
 
 ```bash
 AZURE_COSMOS_DB_ENDPOINT=""
 AZURE_COSMOS_DB_KEY=""
+NEXTAUTH_SECRET=""
+NEXTAUTH_URL=""
+GITHUB_ID=""
+GITHUB_SECRET=""
+RAG_API_URL=""
 ```
 
 Then, run the development server:
