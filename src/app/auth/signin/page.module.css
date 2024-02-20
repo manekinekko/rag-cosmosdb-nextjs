@@ -1,0 +1,28 @@
+.main {
+    display: flex;
+    min-height: 100vh;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    background: #171717;
+    color: white;
+    padding: 1rem;
+    border: 0 none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 200px;
+}
+
+.logo {
+    width: 32px;
+    aspect-ratio: 1/1;
+    margin-right: 10px;
+}

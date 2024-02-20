@@ -159,7 +159,7 @@ export default function Chat({
         collapsed={false}
       >
         <p>
-          <Profile/>
+          <Profile />
         </p>
         <Menu>
           <MenuItem onClick={startNewSession} className={styles.newSessionBtn}>
@@ -180,28 +180,26 @@ export default function Chat({
           <SubMenu label="Settings"></SubMenu>
         </Menu>
         <p>
-          {status === "authenticated" ? (
-            <SignOutButton/>
-            ) : (
-            <SignInButton/>
-          )}
+          {status === "authenticated" ? <SignOutButton /> : <SignInButton />}
         </p>
       </Sidebar>
       <article className={styles.chatContainer}>
         <section className={styles.chatContainer}>
           <div className={styles.center}>
-            <chat-component
-              className={styles.chatComponent}
-              title="Chat with our support Agent"
-              data-interaction-model="chat"
-              data-api-url="https://search.delightfulglacier-c212a9dc.eastus2.azurecontainerapps.io/"
-              data-use-stream="true"
-              data-custom-styles={JSON.stringify(chatComponentCustomStyles)}
-              data-custom-branding="false"
-              data-enable-local-storage="false"
-              data-enable-chat-scroll="true"
-              ref={chatComponentRef}
-            ></chat-component>
+            {session && (
+              <chat-component
+                className={styles.chatComponent}
+                title="Chat with our support Agent"
+                data-interaction-model="chat"
+                data-api-url="https://search.delightfulglacier-c212a9dc.eastus2.azurecontainerapps.io/"
+                data-use-stream="true"
+                data-custom-styles={JSON.stringify(chatComponentCustomStyles)}
+                data-custom-branding="false"
+                data-enable-local-storage="false"
+                data-enable-chat-scroll="true"
+                ref={chatComponentRef}
+              ></chat-component>
+            )}
           </div>
         </section>
         {diagnostics.clientSideRequestStatistics && (

@@ -3,9 +3,12 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
-
 export default function Profile() {
   const { data: session, status } = useSession();
+
+  if (!session) {
+    return <></>;
+  }
 
   return (
     <a href={"/"}>
