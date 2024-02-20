@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
-import { deleteSession, readSession, saveSession } from "../../_lib";
+import { deleteSession, readSession, saveSession } from "../../../_lib";
 
 export async function GET(
   _request: Request,
-  { params }: { params: { partitionKey: [userId: string, sessionId: string] } }
+  { params }: { params: { userId: string; sessionId: string } }
 ) {
-  return NextResponse.json(await readSession(params.partitionKey), {
-    status: 200,
-  });
+  return NextResponse.json(
+    await readSession({ userId: params.userId, sessionId: params.sessionId }),
+    {
+      status: 200,
+    }
+  );
 }
 
 export async function POST(request: Request) {
@@ -21,7 +24,7 @@ export async function POST(request: Request) {
   return NextResponse.json(
     {
       diagnostics,
-      items: (await readSession([userId, sessionId])).items,
+      items: (await readSession({ userId, sessionId })).items,
     },
     {
       status: 200,
@@ -36,7 +39,7 @@ export async function DELETE(request: Request) {
   return NextResponse.json(
     {
       diagnostics,
-      items: (await readSession([userId, sessionId])).items,
+      items: (await readSession({ userId, sessionId })).items,
     },
     {
       status: 200,

@@ -2,7 +2,8 @@
 
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { rand } from "./_utils";
+import { hash, rand } from "./_utils";
+
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -10,7 +11,7 @@ export default function Home() {
 
   if (status === "loading") return <main>Loading...</main>;
   if (status === "authenticated") {
-    redirect(`/${session.user?.email}/${rand()}`);
+    redirect(`/${hash(session.user?.email as string)}/${rand()}`);
   }
   // if (status === 'unauthenticated') return <AccessDenied />;
 }

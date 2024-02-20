@@ -4,6 +4,8 @@ import {
   CosmosDbDiagnosticLevel,
   OperationInput,
 } from "@azure/cosmos";
+import { createHash } from "crypto";
+import { hash } from "../_utils";
 
 const DB_ID = "ChatHistory";
 const CONTAINER_ID = "Session";
@@ -51,6 +53,8 @@ export async function saveSession({
     const operations: OperationInput[] = [];
     const container = await getContainer();
     const [firstEntry] = thread;
+    console.log("Creating items in the database", { userId, sessionId });
+
     for (let entry of thread) {
       entry = {
         ...entry,
@@ -81,12 +85,21 @@ export async function saveSession({
   }
 }
 
-export async function readSession(
-  partitionKey: [userId: string, sessionId: string]
-) {
+export async function readSession({
+  userId,
+  sessionId,
+}: {
+  userId: string;
+  sessionId: string;
+}) {
+  const partitionKey = [userId, sessionId];
+  console.log("Reading items", { userId, sessionId });
+
   const container = await getContainer();
   const querySpec = { query: "SELECT * from c" };
-  const { resources: items, diagnostics } = await container.items.query(querySpec, { partitionKey }).fetchAll();
+  const { resources: items, diagnostics } = await container.items
+    .query(querySpec, { partitionKey })
+    .fetchAll();
   return { items, diagnostics };
 }
 
@@ -97,6 +110,8 @@ export async function deleteSession({
   userId: string;
   sessionId: string;
 }) {
+  console.log("Deleting items", { userId, sessionId });
+
   const container = await getContainer();
   const querySpec = {
     query: "SELECT * from c",
@@ -121,6 +136,8 @@ export async function deleteSession({
 }
 
 export async function listSessions({ userId }: { userId: string }) {
+  console.log("Listing items", { userId });
+
   const container = await getContainer();
 
   // Note: r.parentId = r.id means the first message in the thread

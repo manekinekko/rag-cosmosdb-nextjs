@@ -12,7 +12,6 @@ import {
 } from "react-pro-sidebar";
 import styles from "./page.module.css";
 import { useSession } from "next-auth/react";
-import AccessDenied from "@/components/403";
 import SignInButton from "@/components/signin/page";
 import SignOutButton from "@/components/signout/page";
 import Profile from "@/components/profile/page";
@@ -38,54 +37,15 @@ export default function Chat({
   const [sessionList, setSessionsList] = useState<any>([]);
   const router = useRouter();
   const chatComponentRef = useRef<HTMLElement>(null);
+  const { data: auth, status } = useSession();
 
-  const startNewSession = (_event: any) => {
-    router.replace(`/wassimchegham/${rand()}`);
+  //--------------------------------------------------------------------------------
+
+  const startNewSession = (userId: string) => {
+    router.replace(`/${userId}/${rand()}`);
   };
   const loadSession = (userId: string, sessionId: string) => {
     router.replace(`/${userId}/${sessionId}`);
-  };
-
-  const fetchSessions = async () => {
-    const response = await fetch(`/api/sessions/${userId}`);
-    const { diagnostics, items } = await response.json();
-    console.log({ diagnostics, items });
-    setDiagnostics(diagnostics);
-    setSessionsList(items);
-  };
-
-  const onChatSubmit = async (event: CustomEvent) => {
-    console.log(event.detail);
-    const response = await fetch("/api/threads", {
-      method: "POST",
-      body: JSON.stringify({
-        ...event.detail,
-        userId: params.userId,
-        sessionId: params.sessionId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const { diagnostics } = await response.json();
-    setDiagnostics(diagnostics);
-    await fetchSessions();
-  };
-
-  const onChatReset = async (event: CustomEvent) => {
-    const response = await fetch("/api/threads", {
-      method: "DELETE",
-      body: JSON.stringify({
-        userId: params.userId,
-        sessionId: params.sessionId,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const { diagnostics } = await response.json();
-    setDiagnostics(diagnostics);
-    router.push(`/wassimchegham/${rand()}`);
   };
 
   const chatComponentCustomStyles = {
@@ -102,14 +62,76 @@ export default function Chat({
   };
 
   React.useEffect(() => {
-    document.addEventListener("chat-submit", onChatSubmit as any, {
-      once: true,
-    });
-    document.addEventListener("chat-reset", onChatReset as any, { once: true });
+    const fetchSessions = async (userId: string) => {
+      const response = await fetch(`/api/sessions/${userId}`);
+      const { diagnostics, items } = await response.json();
+      console.log({ diagnostics, items });
+      setDiagnostics(diagnostics);
+      setSessionsList(items);
+    };
 
-    fetchSessions();
+    const onChatSubmit = async (
+      event: CustomEvent,
+      userId: string,
+      sessionId: string
+    ) => {
+      console.log(event.detail);
+      const response = await fetch(`/api/threads/${userId}/${sessionId}`, {
+        method: "POST",
+        body: JSON.stringify({
+          ...event.detail,
+          userId,
+          sessionId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const { diagnostics } = await response.json();
+      setDiagnostics(diagnostics);
+      await fetchSessions(userId);
+    };
 
-    import("../../../../public/dist/chat-component.js").then(
+    const onChatReset = async (
+      event: CustomEvent,
+      userId: string,
+      sessionId: string
+    ) => {
+      const response = await fetch(`/api/threads/${userId}/${sessionId}`, {
+        method: "DELETE",
+        body: JSON.stringify({
+          userId,
+          sessionId,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const { diagnostics } = await response.json();
+      setDiagnostics(diagnostics);
+      router.push(`/${userId}/${rand()}`);
+    };
+
+    document.addEventListener(
+      "chat-submit",
+      (event) => {
+        onChatSubmit(event as any, userId, sessionId);
+      },
+      {
+        once: true,
+      }
+    );
+    document.addEventListener(
+      "chat-reset",
+      () => {
+        onChatReset(event as any, userId, sessionId);
+      },
+      { once: true }
+    );
+
+    fetchSessions(userId);
+
+    import("../../../../public/rag/chat-component.js").then(
       async (_ChatComponentModule) => {
         console.log("Loading chat-component.js");
 
@@ -124,14 +146,9 @@ export default function Chat({
         }
       }
     );
-  }, []);
+  }, [userId, sessionId, router]);
 
-  const { data: session, status } = useSession();
   if (typeof window !== "undefined" && status === "loading") return null;
-  // if (status === "unauthenticated") {
-  //   return redirect(`/`);
-  // }
-
   return (
     <main className={styles.main}>
       <Sidebar
@@ -162,14 +179,17 @@ export default function Chat({
           <Profile />
         </p>
         <Menu>
-          <MenuItem onClick={startNewSession} className={styles.newSessionBtn}>
+          <MenuItem
+            onClick={() => startNewSession(userId)}
+            className={styles.newSessionBtn}
+          >
             Start New Session
           </MenuItem>
           <SubMenu label="Sessions">
             {sessionList.map(function (s: any) {
               return (
                 <MenuItem
-                  key={s.id}
+                  key={s.SessionId}
                   onClick={() => loadSession(s.UserId, s.SessionId)}
                 >
                   {s.sessionName}
@@ -177,16 +197,15 @@ export default function Chat({
               );
             })}
           </SubMenu>
-          <SubMenu label="Settings"></SubMenu>
         </Menu>
-        <p>
+        <p className={styles.signinout}>
           {status === "authenticated" ? <SignOutButton /> : <SignInButton />}
         </p>
       </Sidebar>
       <article className={styles.chatContainer}>
         <section className={styles.chatContainer}>
           <div className={styles.center}>
-            {session && (
+            {auth && (
               <chat-component
                 className={styles.chatComponent}
                 title="Chat with our support Agent"
